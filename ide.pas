@@ -29,7 +29,6 @@ type
   { TIDEFrm }
 
   TIDEFrm = class(TForm)
-    FindDialog1: TFindDialog;
     MainMenu1: TMainMenu;
     FileMenu: TMenuItem;
     FileSave: TMenuItem;
@@ -41,9 +40,10 @@ type
     APIPopupAdd: TMenuItem;
     APIPopupMenuRemove: TMenuItem;
     MenuEdit: TMenuItem;
-    MenuEditFind: TMenuItem;
     MenuEditReplace: TMenuItem;
     MenuFileExit: TMenuItem;
+    APIPopupMenuRefresh: TMenuItem;
+    MenuEditFindNext: TMenuItem;
     ReplaceDialog1: TReplaceDialog;
     SaveAll: TMenuItem;
     PageControl1: TPageControl;
@@ -58,22 +58,26 @@ type
     APIInspector: TTreeView;
     XMLConfig1: TXMLConfig;
     procedure APIPopupAddClick(Sender: TObject);
+    procedure APIPopupMenuRefreshClick(Sender: TObject);
     procedure APIPopupMenuRemoveClick(Sender: TObject);
     procedure FileOpenClick(Sender: TObject);
-    procedure FindDialog1Find(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     function GetKuinkFunctionSignature(AppName, ProcessName, FunctionName:
       string): string;
-    procedure MenuEditFindClick(Sender: TObject);
+    procedure MenuEditFindNextClick(Sender: TObject);
     procedure MenuEditReplaceClick(Sender: TObject);
     procedure MenuFileExitClick(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure PageControl1DragDrop(Sender, Source: TObject; X, Y: integer);
+    procedure LoadAPIInspector();
+    procedure StoreAPIInspector();
     procedure PopulateAPIInspector(Tree: TTreeView; BaseApplication: string);
+
     procedure FileMenuClick(Sender: TObject);
     procedure FileSaveClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure EditorFindNext();
     procedure ReplaceDialog1Find(Sender: TObject);
     procedure ReplaceDialog1Replace(Sender: TObject);
     procedure SaveAllClick(Sender: TObject);
@@ -83,6 +87,7 @@ type
     procedure EditorDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: boolean);
     procedure EditorDragDrop(Sender, Source: TObject; X, Y: integer);
+    procedure EditorEnter(Sender: TObject);
     procedure SaveNode(TabSheet: TKuinkEditorTab);
     procedure SaveAllNodes(Ask: Boolean);
     function KuinkTypeToStr(KuinkType: TKuinkNodeType): string;
@@ -100,6 +105,47 @@ implementation
 {$R *.lfm}
 
 { TIDEFrm }
+
+procedure TIDEFrm.LoadAPIInspector();
+Var OpenedAPI, CurrentAPI: string;
+  i: integer;
+begin
+  //API's -> Load APIInspector with previous ones
+  OpenedAPI := XmlConfig1.GetValue(CONFIG_APIINSPECTOR, '');
+  CurrentAPI := '';
+  for i := 1 to length(OpenedAPI) do
+    if ((OpenedAPI[i] = ',') or (i = length(OpenedAPI))) then
+    begin
+       if (i = length(OpenedAPI)) then
+          CurrentAPI :=  CurrentAPI + OpenedAPI[i];
+       PopulateAPIInspector(APIInspector, ShellTreeView1.Root + '/' + CurrentAPI);
+       CurrentAPI := '';
+    end
+    else
+        CurrentAPI := CurrentAPI + OpenedAPI[i];
+end;
+
+procedure TIDEFrm.StoreAPIInspector();
+  Var OpenedAPI, OpenedFiles: string;
+    i, Max: integer;
+    CurrentNode: TTreeNode;
+  begin
+    //Store the API's to inspect
+    OpenedAPI := '';
+    CurrentNode := APIInspector.Items.GetFirstNode;
+    while (CurrentNode <> nil) do
+    begin
+         if (OpenedAPI <> '') Then
+           OpenedAPI := OpenedAPI + ',' + CurrentNode.Text
+         else
+           OpenedAPI := CurrentNode.Text;
+
+         CurrentNode := CurrentNode.GetNextSibling;
+    end;
+    XmlConfig1.SetValue (CONFIG_APIINSPECTOR, OpenedAPI);
+    //Store the opened files
+end;
+
 
 procedure TIDEFrm.PopulateAPIInspector(Tree: TTreeView; BaseApplication: string);
 var
@@ -155,9 +201,10 @@ var
   XMLDoc: TXMLDocument;
   iNode, iParamNode, iAttr: TDOMNode;
   SearchResult: TSearchRec;
-  FileName, FxName, ParamName, RootDir: string;
+  FileName, FxName, ParamName, ParamRequired, RootDir: string;
   TreeNode, BaseTreeNode: TTreeNode;
 begin
+  RootDir := ShellTreeView1.Root;
   FileName := RootDir + '/' + AppName + '/process/' +
     ProcessName + '/lib/' + ProcessName + '_api.xml';
   if FileExists(FileName) then
@@ -187,8 +234,12 @@ begin
                 if (iParamNode.HasAttributes) and (iParamNode.Attributes.Length > 0) then
                 begin
                   ParamName := iParamNode.Attributes.GetNamedItem('name').NodeValue;
+                  ParamRequired := '';
+                  if (iParamNode.Attributes.GetNamedItem('required') <> nil) then
+                     if (iParamNode.Attributes.GetNamedItem('required').NodeValue = 'false') then
+                        ParamRequired := '<!-- Optional -->';
                   FxSignature :=
-                    FxSignature + '<Param name="' + ParamName + '"></Param>' + #13 + #10;
+                    FxSignature + '<Param name="' + ParamName + '"></Param>' + ParamRequired + #13 + #10;
                 end;
                 iParamNode := iParamNode.NextSibling;
               end;
@@ -199,15 +250,18 @@ begin
         iNode := iNode.NextSibling;
       end;
     end;
-  end;
+  end
+  else
+      ShowMessage('File Not Found: ' + FileName);
 
   FxSignature := FxSignature + '</Call>' + #13 + #10;
   GetKuinkFunctionSignature := FxSignature;
 end;
 
-procedure TIDEFrm.MenuEditFindClick(Sender: TObject);
+
+procedure TIDEFrm.MenuEditFindNextClick(Sender: TObject);
 begin
-  FindDialog1.Execute;
+  EditorFindNext();
 end;
 
 procedure TIDEFrm.MenuEditReplaceClick(Sender: TObject);
@@ -234,22 +288,12 @@ Var OpenedAPI, CurrentAPI: string;
   i: integer;
 begin
   //Load the default data:
+  SynAutoComplete1.AutoCompleteList.LoadFromFile('autoComplete.kuink');
   //Root dir
   ShellTreeView1.Root := XmlConfig1.GetValue(CONFIG_ROOTDIR, CONFIG_ROOTDIR_DEFAULT);
 
   //API's -> Load APIInspector with previous ones
-  OpenedAPI := XmlConfig1.GetValue(CONFIG_APIINSPECTOR, '');
-  CurrentAPI := '';
-  for i := 1 to length(OpenedAPI) do
-    if ((OpenedAPI[i] = ',') or (i = length(OpenedAPI))) then
-    begin
-       if (i = length(OpenedAPI)) then
-          CurrentAPI :=  CurrentAPI + OpenedAPI[i];
-       PopulateAPIInspector(APIInspector, ShellTreeView1.Root + '/' + CurrentAPI);
-       CurrentAPI := '';
-    end
-    else
-        CurrentAPI := CurrentAPI + OpenedAPI[i];
+  LoadAPIInspector();
 end;
 
 procedure TIDEFrm.FileOpenClick(Sender: TObject);
@@ -264,6 +308,7 @@ begin
 
 end;
 
+{
 procedure TIDEFrm.FindDialog1Find(Sender: TObject);
 var
   TabSheet: TKuinkEditorTab;
@@ -284,6 +329,7 @@ begin
 
   Editor.SearchReplace(FindDialog1.FindText, '', Opt);
 end;
+}
 
 procedure TIDEFrm.APIPopupAddClick(Sender: TObject);
 Var cfgValue: string;
@@ -296,6 +342,14 @@ begin
     PopulateAPIInspector(APIInspector, SelectDirectoryDialog1.FileName);
     //XmlConfig1.SetValue (CONFIG_ROOTDIR, SelectDirectoryDialog1.FileName);
   end;
+end;
+
+procedure TIDEFrm.APIPopupMenuRefreshClick(Sender: TObject);
+Var Api: String;
+begin
+  StoreAPIInspector();
+  APIInspector.Items.Clear;
+  LoadAPIInspector();
 end;
 
 procedure TIDEFrm.APIPopupMenuRemoveClick(Sender: TObject);
@@ -326,6 +380,14 @@ procedure TIDEFrm.EditorDragOver(Sender, Source: TObject; X, Y: integer;
   State: TDragState; var Accept: boolean);
 begin
   Accept := True;
+end;
+
+procedure TIDEFrm.EditorEnter(Sender: TObject);
+var Editor: TSynEdit;
+begin
+     Editor := TSynEdit(Sender);
+     SynAutoComplete1.Editor := Editor;
+     SynCompletion1.Editor := Editor;
 end;
 
 procedure TIDEFrm.EditorDragDrop(Sender, Source: TObject; X, Y: integer);
@@ -447,7 +509,8 @@ begin
     Editor.OnChange := @PageChanged;
     Editor.OnDragOver := @EditorDragOver;
     Editor.OnDragDrop := @EditorDragDrop;
-//    Editor.
+    Editor.OnEnter:=@EditorEnter;
+    Editor.TabWidth:=StrToInt(XmlConfig1.GetValue(CONFIG_EDITOR_TABWIDTH, CONFIG_EDITOR_TABWIDTH_DEFAULT));
     Editor.Lines.LoadFromFile(TKuinkEditorTab(tabSheet).Filename);
     StatusBar1.SimpleText := 'NodeType: ' + KuinkTypeToStr(
       TKuinkEditorTab(tabSheet).NodeType);
@@ -468,29 +531,13 @@ begin
 end;
 
 procedure TIDEFrm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-  Var OpenedAPI, OpenedFiles: string;
-    i, Max: integer;
-    CurrentNode: TTreeNode;
-  begin
-    //Store the API's to inspect
-    OpenedAPI := '';
-    CurrentNode := APIInspector.Items.GetFirstNode;
-    while (CurrentNode <> nil) do
-    begin
-         if (OpenedAPI <> '') Then
-           OpenedAPI := OpenedAPI + ',' + CurrentNode.Text
-         else
-           OpenedAPI := CurrentNode.Text;
-
-         CurrentNode := CurrentNode.GetNextSibling;
-    end;
-    XmlConfig1.SetValue (CONFIG_APIINSPECTOR, OpenedAPI);
-    //Store the opened files
-
+begin
+  //Store the opened files
+  StoreAPIInspector();
   SaveAllNodes(True);
 end;
 
-procedure TIDEFrm.ReplaceDialog1Find(Sender: TObject);
+procedure TIDEFrm.EditorFindNext();
   var
     TabSheet: TKuinkEditorTab;
     Editor: TSynEdit;
@@ -510,6 +557,12 @@ procedure TIDEFrm.ReplaceDialog1Find(Sender: TObject);
 
     Editor.SearchReplace(ReplaceDialog1.FindText, '', Opt);
 end;
+
+
+procedure TIDEFrm.ReplaceDialog1Find(Sender: TObject);
+  begin
+       EditorFindNext();
+  end;
 
 procedure TIDEFrm.ReplaceDialog1Replace(Sender: TObject);
   var
@@ -540,6 +593,13 @@ procedure TIDEFrm.SaveAllClick(Sender: TObject);
 begin
   SaveAllNodes(False);
 end;
+
+{
+procedure TIDEFrm.BeautifyNode(TabSheet: TKuinkEditorTab);
+var
+begin
+end;
+}
 
 procedure TIDEFrm.SaveNode(TabSheet: TKuinkEditorTab);
 var

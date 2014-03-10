@@ -12,7 +12,8 @@ Const
      CONFIG_ROOTDIR_DEFAULT = '.';
      CONFIG_APIINSPECTOR = 'General/APIInspector';
      CONFIG_APIINSPECTOR_API = 'API/Item';
-
+     CONFIG_EDITOR_TABWIDTH = 'Editor/TabWidth';
+     CONFIG_EDITOR_TABWIDTH_DEFAULT = '2';
 implementation
 
 

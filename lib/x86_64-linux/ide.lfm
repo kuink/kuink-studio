@@ -1,7 +1,7 @@
 object IDEFrm: TIDEFrm
-  Left = 356
+  Left = 306
   Height = 505
-  Top = 162
+  Top = 158
   Width = 910
   Caption = 'KuinK | Studio'
   ClientHeight = 485
@@ -131,15 +131,15 @@ object IDEFrm: TIDEFrm
     end
     object MenuEdit: TMenuItem
       Caption = 'Edit'
-      object MenuEditFind: TMenuItem
-        Caption = 'Find...'
-        ShortCut = 16454
-        OnClick = MenuEditFindClick
-      end
       object MenuEditReplace: TMenuItem
-        Caption = 'Replace...'
-        ShortCut = 16466
+        Caption = 'Find/Replace...'
+        ShortCut = 16454
         OnClick = MenuEditReplaceClick
+      end
+      object MenuEditFindNext: TMenuItem
+        Caption = 'Find Next'
+        ShortCut = 114
+        OnClick = MenuEditFindNextClick
       end
     end
     object MenuItem1: TMenuItem
@@ -153,6 +153,7 @@ object IDEFrm: TIDEFrm
   object SynCompletion1: TSynCompletion
     ItemList.Strings = (
       '<Application name=""></Application>'
+      '<If condition="">#10<Then>#10</Then>#10<Else>#10</Else>#10</If>'
     )
     Position = 0
     LinesInWindow = 6
@@ -186,16 +187,15 @@ object IDEFrm: TIDEFrm
       Caption = 'Remove'
       OnClick = APIPopupMenuRemoveClick
     end
-  end
-  object FindDialog1: TFindDialog
-    OnFind = FindDialog1Find
-    left = 328
-    top = 1
+    object APIPopupMenuRefresh: TMenuItem
+      Caption = 'Refresh'
+      OnClick = APIPopupMenuRefreshClick
+    end
   end
   object ReplaceDialog1: TReplaceDialog
     Options = [frDown, frReplace, frReplaceAll, frHidePromptOnReplace]
     OnFind = ReplaceDialog1Find
     OnReplace = ReplaceDialog1Replace
-    left = 376
+    left = 328
   end
 end

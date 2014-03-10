@@ -40,6 +40,10 @@ msgstr ""
 msgid "Add..."
 msgstr ""
 
+#: tidefrm.apipopupmenurefresh.caption
+msgid "Refresh"
+msgstr ""
+
 #: tidefrm.apipopupmenuremove.caption
 msgid "Remove"
 msgstr ""
@@ -71,12 +75,12 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: tidefrm.menueditfind.caption
-msgid "Find..."
+#: tidefrm.menueditfindnext.caption
+msgid "Find Next"
 msgstr ""
 
 #: tidefrm.menueditreplace.caption
-msgid "Replace..."
+msgid "Find/Replace..."
 msgstr ""
 
 #: tidefrm.menufileexit.caption

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CONFIG>
   <General RootDir="/opt/cscm-dev/gecol-neon" APIInspector="framework,gecol.core"/>
+  <Editor TabWidth="2"/>
 </CONFIG>
