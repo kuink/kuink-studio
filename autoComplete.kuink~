@@ -1,0 +1,16 @@
+If
+=<If condition="">  
+=	<Then></Then> 
+=	<Else></Else> 
+=</If> 
+Var
+=<Var name=""/> 
+Function
+=<Function name="" scope="" doc="">
+=	<Params>
+=		<Param name="" required="true" doc=""/>
+=	</Params>
+=	<Return type=""/>
+=	<Begin>
+=	</Begin>
+=</Function>

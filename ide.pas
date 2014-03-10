@@ -239,7 +239,7 @@ begin
                      if (iParamNode.Attributes.GetNamedItem('required').NodeValue = 'false') then
                         ParamRequired := '<!-- Optional -->';
                   FxSignature :=
-                    FxSignature + '<Param name="' + ParamName + '"></Param>' + ParamRequired + #13 + #10;
+                    FxSignature + '  <Param name="' + ParamName + '"></Param>' + ParamRequired + #13 + #10;
                 end;
                 iParamNode := iParamNode.NextSibling;
               end;

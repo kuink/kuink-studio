@@ -98,7 +98,39 @@ object IDEFrm: TIDEFrm
     top = 104
   end
   object SynAutoComplete1: TSynAutoComplete
-    EndOfTokenChr = '<"'
+    AutoCompleteList.Strings = (
+      'If'
+      '=<If>'
+      '=<Then>'
+      '=</Then>'
+      '=<Else>'
+      '=</Else>'
+      '=</If>'
+      'Var'
+      '=><Var name=""/>'
+      'gVar'
+      '=><Var name=""/>'
+      'sVar'
+      '=<Var name=""></Var>'
+      'gpVar'
+      '=<Var name="" process="true"/>'
+      'gsVar'
+      '=<Var name="" session="true"/>'
+      'spVar'
+      '=<Var name="" process="true"></Var>'
+      'ssVar'
+      '=<Var name="" session="true"></Var>'
+      'Function'
+      '=<Function name="" scope="">'
+      '=<Params>'
+      '=<Param name="" required="true" doc=""/>'
+      '=</Param>'
+      '=<Return type="" doc=""/>'
+      '=<Begin>'
+      '=</Begin>'
+      '=</Function>'
+    )
+    EndOfTokenChr = '"'
     ShortCut = 8224
     ExecCommandID = ecSynAutoCompletionExecute
     left = 688

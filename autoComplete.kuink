@@ -1,10 +1,10 @@
 If
-=<If condition="">
-=  <Then></Then>
-=  <Else></Else>
-=</If>
+=<If condition="">  
+=<Then></Then> 
+=<Else></Else> 
+=</If> 
 Var
-=<Var name=""/>
+=<Var name=""/> 
 Function
 =<Function name="" scope="" doc="">
 =<Params>

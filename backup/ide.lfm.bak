@@ -4,17 +4,17 @@ object IDEFrm: TIDEFrm
   Top = 132
   Width = 910
   Caption = 'KuinK | Studio'
-  ClientHeight = 505
+  ClientHeight = 485
   ClientWidth = 910
   Menu = MainMenu1
   OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
-  LCLVersion = '1.2.0.3'
+  LCLVersion = '1.0.14.0'
   object ShellTreeView1: TShellTreeView
     AnchorSideRight.Control = Splitter1
     Left = 0
-    Height = 484
+    Height = 469
     Top = 0
     Width = 161
     Align = alLeft
@@ -31,7 +31,7 @@ object IDEFrm: TIDEFrm
     AnchorSideLeft.Control = Splitter1
     AnchorSideRight.Control = Splitter2
     Left = 164
-    Height = 484
+    Height = 469
     Top = 0
     Width = 589
     Align = alClient
@@ -43,24 +43,25 @@ object IDEFrm: TIDEFrm
     AnchorSideLeft.Control = ShellTreeView1
     AnchorSideRight.Control = PageControl1
     Left = 161
-    Height = 484
+    Height = 469
     Top = 0
     Width = 3
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 484
+    Height = 16
+    Top = 469
     Width = 910
     Panels = <>
   end
   object APIInspector: TTreeView
     AnchorSideLeft.Control = Splitter2
     Left = 761
-    Height = 484
+    Height = 469
     Top = 0
     Width = 149
     Align = alRight
+    DefaultItemHeight = 16
     DragMode = dmAutomatic
     PopupMenu = APIPopupMenu
     RightClickSelect = True
@@ -70,7 +71,7 @@ object IDEFrm: TIDEFrm
   end
   object Splitter2: TSplitter
     Left = 753
-    Height = 484
+    Height = 469
     Top = 0
     Width = 8
     Align = alRight
@@ -97,7 +98,39 @@ object IDEFrm: TIDEFrm
     top = 104
   end
   object SynAutoComplete1: TSynAutoComplete
-    EndOfTokenChr = '<"'
+    AutoCompleteList.Strings = (
+      'If'
+      '=<If>'
+      '=<Then>'
+      '=</Then>'
+      '=<Else>'
+      '=</Else>'
+      '=</If>'
+      'Var'
+      '=><Var name=""/>'
+      'gVar'
+      '=><Var name=""/>'
+      'sVar'
+      '=<Var name=""></Var>'
+      'gpVar'
+      '=<Var name="" process="true"/>'
+      'gsVar'
+      '=<Var name="" session="true"/>'
+      'spVar'
+      '=<Var name="" process="true"></Var>'
+      'ssVar'
+      '=<Var name="" session="true"></Var>'
+      'Function'
+      '=<Function name="" scope="">'
+      '=<Params>'
+      '=<Param name="" required="true" doc=""/>'
+      '=</Param>'
+      '=<Return type="" doc=""/>'
+      '=<Begin>'
+      '=</Begin>'
+      '=</Function>'
+    )
+    EndOfTokenChr = '"'
     ShortCut = 8224
     ExecCommandID = ecSynAutoCompletionExecute
     left = 688

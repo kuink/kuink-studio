@@ -239,7 +239,7 @@ begin
                      if (iParamNode.Attributes.GetNamedItem('required').NodeValue = 'false') then
                         ParamRequired := '<!-- Optional -->';
                   FxSignature :=
-                    FxSignature + '<Param name="' + ParamName + '"></Param>' + ParamRequired + #13 + #10;
+                    FxSignature + '  <Param name="' + ParamName + '"></Param>' + ParamRequired + #13 + #10;
                 end;
                 iParamNode := iParamNode.NextSibling;
               end;
@@ -288,7 +288,7 @@ Var OpenedAPI, CurrentAPI: string;
   i: integer;
 begin
   //Load the default data:
-  SynAutoComplete1.AutoCompleteList.LoadFromFile('autoComplete.kuink');
+  //SynAutoComplete1.AutoCompleteList.LoadFromFile('autoComplete.kuink');
   //Root dir
   ShellTreeView1.Root := XmlConfig1.GetValue(CONFIG_ROOTDIR, CONFIG_ROOTDIR_DEFAULT);
 
@@ -510,6 +510,7 @@ begin
     Editor.OnDragOver := @EditorDragOver;
     Editor.OnDragDrop := @EditorDragDrop;
     Editor.OnEnter:=@EditorEnter;
+    Editor.Options:=[eoTabIndent, eoTabsToSpaces];
 
     Editor.TabWidth:=StrToInt(XmlConfig1.GetValue(CONFIG_EDITOR_TABWIDTH, CONFIG_EDITOR_TABWIDTH_DEFAULT));
     Editor.Lines.LoadFromFile(TKuinkEditorTab(tabSheet).Filename);
