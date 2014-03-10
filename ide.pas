@@ -214,7 +214,7 @@ begin
     if iNode <> nil then
     begin
       FxSignature := '<Call library="' + AppName + ',' + ProcessName +
-        ',' + ProcessName + '_api" function="' + FunctionName + '">' + #13 + #10;
+        ',' + 'api" function="' + FunctionName + '">' + #13 + #10;
       //Process Function names
       iNode := iNode.FirstChild;
       while iNode <> nil do

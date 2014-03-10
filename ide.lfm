@@ -1,27 +1,27 @@
 object IDEFrm: TIDEFrm
-  Left = 306
+  Left = 362
   Height = 505
-  Top = 158
+  Top = 132
   Width = 910
   Caption = 'KuinK | Studio'
-  ClientHeight = 485
+  ClientHeight = 505
   ClientWidth = 910
   Menu = MainMenu1
   OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
-  LCLVersion = '1.0.14.0'
+  LCLVersion = '1.2.0.3'
   object ShellTreeView1: TShellTreeView
     AnchorSideRight.Control = Splitter1
     Left = 0
-    Height = 469
+    Height = 484
     Top = 0
     Width = 161
     Align = alLeft
     ExpandSignType = tvestPlusMinus
     FileSortType = fstAlphabet
     ReadOnly = True
-    Root = '/opt/cscm-dev/kuink-ide/apps'
+    Root = '/'
     TabOrder = 0
     OnSelectionChanged = ShellTreeView1SelectionChanged
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
@@ -31,7 +31,7 @@ object IDEFrm: TIDEFrm
     AnchorSideLeft.Control = Splitter1
     AnchorSideRight.Control = Splitter2
     Left = 164
-    Height = 469
+    Height = 484
     Top = 0
     Width = 589
     Align = alClient
@@ -43,25 +43,24 @@ object IDEFrm: TIDEFrm
     AnchorSideLeft.Control = ShellTreeView1
     AnchorSideRight.Control = PageControl1
     Left = 161
-    Height = 469
+    Height = 484
     Top = 0
     Width = 3
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 16
-    Top = 469
+    Height = 21
+    Top = 484
     Width = 910
     Panels = <>
   end
   object APIInspector: TTreeView
     AnchorSideLeft.Control = Splitter2
     Left = 761
-    Height = 469
+    Height = 484
     Top = 0
     Width = 149
     Align = alRight
-    DefaultItemHeight = 16
     DragMode = dmAutomatic
     PopupMenu = APIPopupMenu
     RightClickSelect = True
@@ -71,7 +70,7 @@ object IDEFrm: TIDEFrm
   end
   object Splitter2: TSplitter
     Left = 753
-    Height = 469
+    Height = 484
     Top = 0
     Width = 8
     Align = alRight

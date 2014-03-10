@@ -1,12 +1,12 @@
 object AboutFrm: TAboutFrm
-  Left = 479
+  Left = -8
   Height = 240
-  Top = 265
+  Top = 543
   Width = 320
   Caption = 'About'
   ClientHeight = 240
   ClientWidth = 320
-  LCLVersion = '1.0.14.0'
+  LCLVersion = '1.2.0.3'
   object Image1: TImage
     Left = 48
     Height = 120
