@@ -20,10 +20,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ide"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="282"/>
-        <CursorPos X="8" Y="293"/>
+        <TopLine Value="205"/>
+        <CursorPos X="16" Y="217"/>
         <UsageCount Value="72"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -35,7 +36,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="about"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -47,7 +48,7 @@
         <Filename Value="identifiers.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Identifiers"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="28" Y="15"/>
@@ -72,13 +73,10 @@
       </Unit5>
       <Unit6>
         <Filename Value="/usr/share/lazarus/1.2.0/lcl/interfaces/gtk2/gtk2widgetset.inc"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1285"/>
-        <CursorPos X="1" Y="1300"/>
+        <TopLine Value="1197"/>
+        <CursorPos X="27" Y="1312"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit6>
     </Units>
     <General>

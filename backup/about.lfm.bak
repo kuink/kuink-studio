@@ -1,5 +1,5 @@
 object AboutFrm: TAboutFrm
-  Left = 479
+  Left = 608
   Height = 240
   Top = 265
   Width = 320

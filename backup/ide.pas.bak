@@ -214,7 +214,7 @@ begin
     if iNode <> nil then
     begin
       FxSignature := '<Call library="' + AppName + ',' + ProcessName +
-        ',' + ProcessName + '_api" function="' + FunctionName + '">' + #13 + #10;
+        ',' + 'api" function="' + FunctionName + '">' + #13 + #10;
       //Process Function names
       iNode := iNode.FirstChild;
       while iNode <> nil do
@@ -510,7 +510,7 @@ begin
     Editor.OnDragOver := @EditorDragOver;
     Editor.OnDragDrop := @EditorDragDrop;
     Editor.OnEnter:=@EditorEnter;
-    Editor.
+
     Editor.TabWidth:=StrToInt(XmlConfig1.GetValue(CONFIG_EDITOR_TABWIDTH, CONFIG_EDITOR_TABWIDTH_DEFAULT));
     Editor.Lines.LoadFromFile(TKuinkEditorTab(tabSheet).Filename);
     StatusBar1.SimpleText := 'NodeType: ' + KuinkTypeToStr(

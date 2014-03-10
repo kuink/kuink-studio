@@ -510,6 +510,7 @@ begin
     Editor.OnDragOver := @EditorDragOver;
     Editor.OnDragDrop := @EditorDragDrop;
     Editor.OnEnter:=@EditorEnter;
+    Editor.Options:=[eoTabIndent, eoTabsToSpaces];
 
     Editor.TabWidth:=StrToInt(XmlConfig1.GetValue(CONFIG_EDITOR_TABWIDTH, CONFIG_EDITOR_TABWIDTH_DEFAULT));
     Editor.Lines.LoadFromFile(TKuinkEditorTab(tabSheet).Filename);
