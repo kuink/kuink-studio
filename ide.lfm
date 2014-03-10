@@ -1,0 +1,201 @@
+object IDEFrm: TIDEFrm
+  Left = 356
+  Height = 505
+  Top = 162
+  Width = 910
+  Caption = 'KuinK | Studio'
+  ClientHeight = 485
+  ClientWidth = 910
+  Menu = MainMenu1
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnCreate = FormCreate
+  LCLVersion = '1.0.14.0'
+  object ShellTreeView1: TShellTreeView
+    AnchorSideRight.Control = Splitter1
+    Left = 0
+    Height = 469
+    Top = 0
+    Width = 161
+    Align = alLeft
+    ExpandSignType = tvestPlusMinus
+    FileSortType = fstAlphabet
+    ReadOnly = True
+    Root = '/opt/cscm-dev/kuink-ide/apps'
+    TabOrder = 0
+    OnSelectionChanged = ShellTreeView1SelectionChanged
+    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+    ObjectTypes = [otFolders, otNonFolders]
+  end
+  object PageControl1: TPageControl
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideRight.Control = Splitter2
+    Left = 164
+    Height = 469
+    Top = 0
+    Width = 589
+    Align = alClient
+    DragMode = dmAutomatic
+    TabOrder = 1
+    OnDragDrop = PageControl1DragDrop
+  end
+  object Splitter1: TSplitter
+    AnchorSideLeft.Control = ShellTreeView1
+    AnchorSideRight.Control = PageControl1
+    Left = 161
+    Height = 469
+    Top = 0
+    Width = 3
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 16
+    Top = 469
+    Width = 910
+    Panels = <>
+  end
+  object APIInspector: TTreeView
+    AnchorSideLeft.Control = Splitter2
+    Left = 761
+    Height = 469
+    Top = 0
+    Width = 149
+    Align = alRight
+    DefaultItemHeight = 16
+    DragMode = dmAutomatic
+    PopupMenu = APIPopupMenu
+    RightClickSelect = True
+    SortType = stBoth
+    TabOrder = 4
+    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoRightClickSelect, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+  end
+  object Splitter2: TSplitter
+    Left = 753
+    Height = 469
+    Top = 0
+    Width = 8
+    Align = alRight
+    ResizeAnchor = akRight
+  end
+  object SynXMLSyn1: TSynXMLSyn
+    DefaultFilter = 'XML Document (*.xml,*.xsd,*.xsl,*.xslt,*.dtd)|*.xml;*.xsd;*.xsl;*.xslt;*.dtd'
+    Enabled = False
+    ElementAttri.FrameEdges = sfeAround
+    AttributeAttri.FrameEdges = sfeAround
+    NamespaceAttributeAttri.FrameEdges = sfeAround
+    AttributeValueAttri.FrameEdges = sfeAround
+    NamespaceAttributeValueAttri.FrameEdges = sfeAround
+    TextAttri.FrameEdges = sfeAround
+    CDATAAttri.FrameEdges = sfeAround
+    EntityRefAttri.FrameEdges = sfeAround
+    ProcessingInstructionAttri.FrameEdges = sfeAround
+    CommentAttri.FrameEdges = sfeAround
+    DocTypeAttri.FrameEdges = sfeAround
+    SpaceAttri.FrameEdges = sfeAround
+    SymbolAttri.FrameEdges = sfeAround
+    WantBracesParsed = False
+    left = 688
+    top = 104
+  end
+  object SynAutoComplete1: TSynAutoComplete
+    EndOfTokenChr = '<"'
+    ShortCut = 8224
+    ExecCommandID = ecSynAutoCompletionExecute
+    left = 688
+  end
+  object MainMenu1: TMainMenu
+    left = 192
+    object FileMenu: TMenuItem
+      Caption = 'File'
+      OnClick = FileMenuClick
+      object FileOpen: TMenuItem
+        Caption = 'Open...'
+        OnClick = FileOpenClick
+      end
+      object FileSave: TMenuItem
+        Caption = 'Save'
+        ShortCut = 16467
+        OnClick = FileSaveClick
+      end
+      object SaveAll: TMenuItem
+        Caption = 'Save All'
+        OnClick = SaveAllClick
+      end
+      object FileCloseAll: TMenuItem
+        Caption = 'Close All'
+      end
+      object MenuFileExit: TMenuItem
+        Caption = 'Exit'
+        OnClick = MenuFileExitClick
+      end
+    end
+    object MenuEdit: TMenuItem
+      Caption = 'Edit'
+      object MenuEditFind: TMenuItem
+        Caption = 'Find...'
+        ShortCut = 16454
+        OnClick = MenuEditFindClick
+      end
+      object MenuEditReplace: TMenuItem
+        Caption = 'Replace...'
+        ShortCut = 16466
+        OnClick = MenuEditReplaceClick
+      end
+    end
+    object MenuItem1: TMenuItem
+      Caption = 'Help'
+      object MenuItem2: TMenuItem
+        Caption = 'About'
+        OnClick = MenuItem2Click
+      end
+    end
+  end
+  object SynCompletion1: TSynCompletion
+    ItemList.Strings = (
+      '<Application name=""></Application>'
+    )
+    Position = 0
+    LinesInWindow = 6
+    SelectedColor = clHighlight
+    CaseSensitive = False
+    Width = 262
+    ShortCut = 16416
+    EndOfTokenChr = '<"'
+    ExecCommandID = ecSynCompletionExecute
+    left = 688
+    top = 48
+  end
+  object SelectDirectoryDialog1: TSelectDirectoryDialog
+    left = 232
+  end
+  object XMLConfig1: TXMLConfig
+    Filename = 'config.xml'
+    StartEmpty = False
+    RootName = 'CONFIG'
+    left = 276
+    top = 1
+  end
+  object APIPopupMenu: TPopupMenu
+    left = 872
+    top = 1
+    object APIPopupAdd: TMenuItem
+      Caption = 'Add...'
+      OnClick = APIPopupAddClick
+    end
+    object APIPopupMenuRemove: TMenuItem
+      Caption = 'Remove'
+      OnClick = APIPopupMenuRemoveClick
+    end
+  end
+  object FindDialog1: TFindDialog
+    OnFind = FindDialog1Find
+    left = 328
+    top = 1
+  end
+  object ReplaceDialog1: TReplaceDialog
+    Options = [frDown, frReplace, frReplaceAll, frHidePromptOnReplace]
+    OnFind = ReplaceDialog1Find
+    OnReplace = ReplaceDialog1Replace
+    left = 376
+  end
+end

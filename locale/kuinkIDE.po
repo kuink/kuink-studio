@@ -1,0 +1,100 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: taboutfrm.caption
+msgctxt "taboutfrm.caption"
+msgid "About"
+msgstr ""
+
+#: tform1.caption
+msgctxt "tform1.caption"
+msgid "KuinK | Studio"
+msgstr ""
+
+#: tform1.filemenu.caption
+msgctxt "tform1.filemenu.caption"
+msgid "File"
+msgstr ""
+
+#: tform1.filesave.caption
+msgctxt "tform1.filesave.caption"
+msgid "Save"
+msgstr ""
+
+#: tform1.menuitem1.caption
+msgctxt "tform1.menuitem1.caption"
+msgid "Help"
+msgstr ""
+
+#: tform1.menuitem2.caption
+msgctxt "TFORM1.MENUITEM2.CAPTION"
+msgid "About"
+msgstr ""
+
+#: tform1.saveall.caption
+msgctxt "tform1.saveall.caption"
+msgid "Save All"
+msgstr ""
+
+#: tidefrm.apipopupadd.caption
+msgid "Add..."
+msgstr ""
+
+#: tidefrm.apipopupmenuremove.caption
+msgid "Remove"
+msgstr ""
+
+#: tidefrm.caption
+msgctxt "TIDEFRM.CAPTION"
+msgid "KuinK | Studio"
+msgstr ""
+
+#: tidefrm.filecloseall.caption
+msgid "Close All"
+msgstr ""
+
+#: tidefrm.filemenu.caption
+msgctxt "TIDEFRM.FILEMENU.CAPTION"
+msgid "File"
+msgstr ""
+
+#: tidefrm.fileopen.caption
+msgid "Open..."
+msgstr ""
+
+#: tidefrm.filesave.caption
+msgctxt "TIDEFRM.FILESAVE.CAPTION"
+msgid "Save"
+msgstr ""
+
+#: tidefrm.menuedit.caption
+msgid "Edit"
+msgstr ""
+
+#: tidefrm.menueditfind.caption
+msgid "Find..."
+msgstr ""
+
+#: tidefrm.menueditreplace.caption
+msgid "Replace..."
+msgstr ""
+
+#: tidefrm.menufileexit.caption
+msgid "Exit"
+msgstr ""
+
+#: tidefrm.menuitem1.caption
+msgctxt "TIDEFRM.MENUITEM1.CAPTION"
+msgid "Help"
+msgstr ""
+
+#: tidefrm.menuitem2.caption
+msgctxt "TIDEFRM.MENUITEM2.CAPTION"
+msgid "About"
+msgstr ""
+
+#: tidefrm.saveall.caption
+msgctxt "TIDEFRM.SAVEALL.CAPTION"
+msgid "Save All"
+msgstr ""
+
