@@ -44,9 +44,15 @@ type
     MenuFileExit: TMenuItem;
     APIPopupMenuRefresh: TMenuItem;
     MenuEditFindNext: TMenuItem;
+    FileExplorerPopupMenu: TPopupMenu;
+    FEPopupNew: TMenuItem;
+    FEPopupNewXmlFile: TMenuItem;
+    FileNew: TMenuItem;
+    FileNewXmlFile: TMenuItem;
     ReplaceDialog1: TReplaceDialog;
     SaveAll: TMenuItem;
     PageControl1: TPageControl;
+    SaveDialog1: TSaveDialog;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     ShellTreeView1: TShellTreeView;
     Splitter1: TSplitter;
@@ -60,6 +66,7 @@ type
     procedure APIPopupAddClick(Sender: TObject);
     procedure APIPopupMenuRefreshClick(Sender: TObject);
     procedure APIPopupMenuRemoveClick(Sender: TObject);
+    procedure FileNewXmlFileClick(Sender: TObject);
     procedure FileOpenClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -69,7 +76,6 @@ type
     procedure MenuEditReplaceClick(Sender: TObject);
     procedure MenuFileExitClick(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
-    procedure PageControl1DragDrop(Sender, Source: TObject; X, Y: integer);
     procedure LoadAPIInspector();
     procedure StoreAPIInspector();
     procedure PopulateAPIInspector(Tree: TTreeView; BaseApplication: string);
@@ -90,6 +96,8 @@ type
     procedure EditorEnter(Sender: TObject);
     procedure SaveNode(TabSheet: TKuinkEditorTab);
     procedure SaveAllNodes(Ask: Boolean);
+    procedure OpenNode(FileName: String);
+
     function KuinkTypeToStr(KuinkType: TKuinkNodeType): string;
   private
     { private declarations }
@@ -288,7 +296,7 @@ Var OpenedAPI, CurrentAPI: string;
   i: integer;
 begin
   //Load the default data:
-  //SynAutoComplete1.AutoCompleteList.LoadFromFile('autoComplete.kuink');
+  SynAutoComplete1.AutoCompleteList.LoadFromFile('autoComplete.txt');
   //Root dir
   ShellTreeView1.Root := XmlConfig1.GetValue(CONFIG_ROOTDIR, CONFIG_ROOTDIR_DEFAULT);
 
@@ -307,29 +315,6 @@ begin
   end;
 
 end;
-
-{
-procedure TIDEFrm.FindDialog1Find(Sender: TObject);
-var
-  TabSheet: TKuinkEditorTab;
-  Editor: TSynEdit;
-  Opt : TSynSearchOptions;
-begin
-  TabSheet := TKuinkEditorTab(PageControl1.ActivePage);
-  Editor := TSynEdit(tabSheet.Controls[0]);
-  Opt := [];
-  if frWholeWord in FindDialog1.Options then
-    Include(Opt,ssoWholeWord);
-  if frMatchCase in FindDialog1.Options then
-    Include(Opt,ssoMatchCase);
-  if frEntireScope in FindDialog1.Options then
-     Include(Opt, ssoEntireScope);
-  if not (frDown in FindDialog1.Options) then
-    Include(Opt,ssoBackwards);
-
-  Editor.SearchReplace(FindDialog1.FindText, '', Opt);
-end;
-}
 
 procedure TIDEFrm.APIPopupAddClick(Sender: TObject);
 Var cfgValue: string;
@@ -358,11 +343,11 @@ begin
     APIInspector.Items.Delete(APIInspector.Selected);
 end;
 
-procedure TIDEFrm.PageControl1DragDrop(Sender, Source: TObject; X, Y: integer);
+procedure TIDEFrm.FileNewXmlFileClick(Sender: TObject);
 begin
-  //Store the opened files
-  ShowMessage('Drop something here');
+  OpenNode('untitled');
 end;
+
 
 function TIDEFrm.KuinkTypeToStr(KuinkType: TKuinkNodeType): string;
 var
@@ -483,39 +468,7 @@ begin
   //If it is a directory, dont create the TabSheet
   if (not Found) and (not isDirectory) then
   begin
-    NodeName := ExtractFileNameOnly(ShellTreeView1.GetSelectedNodePath());
-    PageControl1.Options := [nboShowCloseButtons];
-    TabSheet := TKuinkEditorTab.Create(self);
-    PageControl1.ActivePage := TabSheet;
-
-    case NodeName of
-      'application': NodeType := KuinkApplication;
-      'process': NodeType := KuinkProcess;
-      else
-        NodeType := KuinkNode;
-    end;
-    TKuinkEditorTab(tabSheet).Changed := False;
-    TKuinkEditorTab(tabSheet).NodeType := NodeType;
-    TabSheet.Parent := PageControl1;
-    TKuinkEditorTab(tabSheet).Filename := ShellTreeView1.GetSelectedNodePath();
-    TabSheet.Caption := NodeName;
-    OnExitEventHandler := @ClosePage;
-    PageControl1.OnCloseTabClicked := onExitEventHandler;
-    Editor := TSynEdit.Create(tabSheet);
-    Editor.Parent := tabSheet;
-    Editor.Align := alClient;
-    Editor.Visible := True;
-    Editor.Highlighter := SynXMLSyn1;
-    Editor.OnChange := @PageChanged;
-    Editor.OnDragOver := @EditorDragOver;
-    Editor.OnDragDrop := @EditorDragDrop;
-    Editor.OnEnter:=@EditorEnter;
-    Editor.Options:=[eoTabIndent, eoTabsToSpaces];
-
-    Editor.TabWidth:=StrToInt(XmlConfig1.GetValue(CONFIG_EDITOR_TABWIDTH, CONFIG_EDITOR_TABWIDTH_DEFAULT));
-    Editor.Lines.LoadFromFile(TKuinkEditorTab(tabSheet).Filename);
-    StatusBar1.SimpleText := 'NodeType: ' + KuinkTypeToStr(
-      TKuinkEditorTab(tabSheet).NodeType);
+       OpenNode(ShellTreeView1.GetSelectedNodePath());
   end;
 end;
 
@@ -608,7 +561,10 @@ var
   Editor: TSynEdit;
   XMLDoc: TXMLDocument;
   S: TStringStream;
+  RefreshFileExplorer, SaveCanceled: Boolean;
 begin
+  RefreshFileExplorer := False;
+  SaveCanceled := False;
   if TabSheet.Changed then
   begin
     Editor := TSynEdit(tabSheet.Controls[0]);
@@ -626,11 +582,29 @@ begin
     S.Free;
     XMLDoc.Free;
 
-    StatusBar1.SimpleText := 'Saving... ' + TabSheet.Filename;
-    Editor.Lines.SaveToFile(TabSheet.Filename);
-    StatusBar1.SimpleText := 'Saved... ' + TabSheet.Filename;
-    TabSheet.Changed := False;
-    TabSheet.Caption := ExtractFileNameOnly(TabSheet.Filename);
+    If (TabSheet.Filename = 'untitled') Then
+    begin
+      SaveDialog1.InitialDir := ShellTreeView1.Root;
+      if SaveDialog1.Execute then
+      begin
+          TabSheet.Filename := SaveDialog1.Filename;
+          RefreshFileExplorer:=True;
+      end
+      else
+          SaveCanceled:=True;
+
+    end;
+
+    If Not SaveCanceled Then
+    begin
+      StatusBar1.SimpleText := 'Saving... ' + TabSheet.Filename;
+      Editor.Lines.SaveToFile(TabSheet.Filename);
+      StatusBar1.SimpleText := 'Saved... ' + TabSheet.Filename;
+      TabSheet.Changed := False;
+      TabSheet.Caption := ExtractFileNameOnly(TabSheet.Filename);
+      If RefreshFileExplorer Then
+         ShellTreeView1.Refresh;
+    end;
   end;
 end;
 
@@ -659,6 +633,53 @@ begin
           SaveNode(TabSheet);
     end;
   end;
+end;
+
+procedure TIDEFrm.OpenNode(FileName: String);
+Var
+  InnerPageControl: TPageControl;
+  TabSheet: TTabSheet;
+  Editor: TSynEdit;
+  OnExitEventHandler: TNotifyEvent;
+  NodeName: string;
+  NodeType: TKuinkNodeType;
+begin
+  NodeName := ExtractFileNameOnly(FileName);
+  PageControl1.Options := [nboShowCloseButtons];
+
+  TabSheet := TKuinkEditorTab.Create(self);
+  PageControl1.ActivePage := TabSheet;
+
+  case NodeName of
+    'application': NodeType := KuinkApplication;
+    'process': NodeType := KuinkProcess;
+    else
+      NodeType := KuinkNode;
+  end;
+  TKuinkEditorTab(TabSheet).Changed := False;
+  TKuinkEditorTab(TabSheet).NodeType := NodeType;
+  TabSheet.Parent := PageControl1;
+  TKuinkEditorTab(TabSheet).Filename := FileName;
+  TabSheet.Caption := NodeName;
+  OnExitEventHandler := @ClosePage;
+  PageControl1.OnCloseTabClicked := onExitEventHandler;
+  Editor := TSynEdit.Create(tabSheet);
+  Editor.Parent := TabSheet;
+  Editor.Align := alClient;
+  Editor.Visible := True;
+  Editor.Highlighter := SynXMLSyn1;
+  Editor.OnChange := @PageChanged;
+  Editor.OnDragOver := @EditorDragOver;
+  Editor.OnDragDrop := @EditorDragDrop;
+  Editor.OnEnter:=@EditorEnter;
+  Editor.Options:=[eoTabIndent, eoTabsToSpaces];
+
+  Editor.TabWidth:=StrToInt(XmlConfig1.GetValue(CONFIG_EDITOR_TABWIDTH, CONFIG_EDITOR_TABWIDTH_DEFAULT));
+  If (FileName <> 'untitled') Then
+    Editor.Lines.LoadFromFile(TKuinkEditorTab(TabSheet).Filename);
+  StatusBar1.SimpleText := 'NodeType: ' + KuinkTypeToStr(
+    TKuinkEditorTab(tabSheet).NodeType);
+
 end;
 
 end.

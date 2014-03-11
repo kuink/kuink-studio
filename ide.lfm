@@ -20,6 +20,7 @@ object IDEFrm: TIDEFrm
     Align = alLeft
     ExpandSignType = tvestPlusMinus
     FileSortType = fstAlphabet
+    PopupMenu = FileExplorerPopupMenu
     ReadOnly = True
     Root = '/'
     TabOrder = 0
@@ -37,7 +38,6 @@ object IDEFrm: TIDEFrm
     Align = alClient
     DragMode = dmAutomatic
     TabOrder = 1
-    OnDragDrop = PageControl1DragDrop
   end
   object Splitter1: TSplitter
     AnchorSideLeft.Control = ShellTreeView1
@@ -140,6 +140,13 @@ object IDEFrm: TIDEFrm
     object FileMenu: TMenuItem
       Caption = 'File'
       OnClick = FileMenuClick
+      object FileNew: TMenuItem
+        Caption = 'New'
+        object FileNewXmlFile: TMenuItem
+          Caption = 'Xml File'
+          OnClick = FileNewXmlFileClick
+        end
+      end
       object FileOpen: TMenuItem
         Caption = 'Open...'
         OnClick = FileOpenClick
@@ -229,5 +236,18 @@ object IDEFrm: TIDEFrm
     OnFind = ReplaceDialog1Find
     OnReplace = ReplaceDialog1Replace
     left = 328
+  end
+  object FileExplorerPopupMenu: TPopupMenu
+    top = 1
+    object FEPopupNew: TMenuItem
+      Caption = 'New'
+      object FEPopupNewXmlFile: TMenuItem
+        Caption = 'Xml File'
+      end
+    end
+  end
+  object SaveDialog1: TSaveDialog
+    left = 386
+    top = 3
   end
 end

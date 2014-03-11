@@ -53,6 +53,16 @@ msgctxt "TIDEFRM.CAPTION"
 msgid "KuinK | Studio"
 msgstr ""
 
+#: tidefrm.fepopupnew.caption
+msgctxt "tidefrm.fepopupnew.caption"
+msgid "New"
+msgstr ""
+
+#: tidefrm.fepopupnewxmlfile.caption
+msgctxt "tidefrm.fepopupnewxmlfile.caption"
+msgid "Xml File"
+msgstr ""
+
 #: tidefrm.filecloseall.caption
 msgid "Close All"
 msgstr ""
@@ -60,6 +70,16 @@ msgstr ""
 #: tidefrm.filemenu.caption
 msgctxt "TIDEFRM.FILEMENU.CAPTION"
 msgid "File"
+msgstr ""
+
+#: tidefrm.filenew.caption
+msgctxt "TIDEFRM.FILENEW.CAPTION"
+msgid "New"
+msgstr ""
+
+#: tidefrm.filenewxmlfile.caption
+msgctxt "TIDEFRM.FILENEWXMLFILE.CAPTION"
+msgid "Xml File"
 msgstr ""
 
 #: tidefrm.fileopen.caption

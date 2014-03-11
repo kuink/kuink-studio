@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<CONFIG>
-  <General APIInspector="framework">
-    <APIInspector>
-      <API Item=",framework,gecol.core,gecol.core"/>
-    </APIInspector>
-  </General>
-</CONFIG>
