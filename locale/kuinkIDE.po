@@ -41,6 +41,7 @@ msgid "Add..."
 msgstr ""
 
 #: tidefrm.apipopupmenurefresh.caption
+msgctxt "tidefrm.apipopupmenurefresh.caption"
 msgid "Refresh"
 msgstr ""
 
@@ -61,6 +62,11 @@ msgstr ""
 #: tidefrm.fepopupnewxmlfile.caption
 msgctxt "tidefrm.fepopupnewxmlfile.caption"
 msgid "Xml File"
+msgstr ""
+
+#: tidefrm.fepopuprefresh.caption
+msgctxt "TIDEFRM.FEPOPUPREFRESH.CAPTION"
+msgid "Refresh"
 msgstr ""
 
 #: tidefrm.filecloseall.caption

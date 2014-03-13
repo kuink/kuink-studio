@@ -243,7 +243,12 @@ object IDEFrm: TIDEFrm
       Caption = 'New'
       object FEPopupNewXmlFile: TMenuItem
         Caption = 'Xml File'
+        OnClick = FEPopupNewXmlFileClick
       end
+    end
+    object FEPopupRefresh: TMenuItem
+      Caption = 'Refresh'
+      OnClick = FEPopupRefreshClick
     end
   end
   object SaveDialog1: TSaveDialog

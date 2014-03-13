@@ -49,6 +49,7 @@ type
     FEPopupNewXmlFile: TMenuItem;
     FileNew: TMenuItem;
     FileNewXmlFile: TMenuItem;
+    FEPopupRefresh: TMenuItem;
     ReplaceDialog1: TReplaceDialog;
     SaveAll: TMenuItem;
     PageControl1: TPageControl;
@@ -66,6 +67,8 @@ type
     procedure APIPopupAddClick(Sender: TObject);
     procedure APIPopupMenuRefreshClick(Sender: TObject);
     procedure APIPopupMenuRemoveClick(Sender: TObject);
+    procedure FEPopupNewXmlFileClick(Sender: TObject);
+    procedure FEPopupRefreshClick(Sender: TObject);
     procedure FileNewXmlFileClick(Sender: TObject);
     procedure FileOpenClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -341,6 +344,16 @@ procedure TIDEFrm.APIPopupMenuRemoveClick(Sender: TObject);
 begin
   If (APIInspector.Selected <> nil) Then
     APIInspector.Items.Delete(APIInspector.Selected);
+end;
+
+procedure TIDEFrm.FEPopupNewXmlFileClick(Sender: TObject);
+begin
+  OpenNode('untitled');
+end;
+
+procedure TIDEFrm.FEPopupRefreshClick(Sender: TObject);
+begin
+  ShellTreeView1.Refresh;
 end;
 
 procedure TIDEFrm.FileNewXmlFileClick(Sender: TObject);
