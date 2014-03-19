@@ -21,11 +21,10 @@ object IDEFrm: TIDEFrm
     ExpandSignType = tvestPlusMinus
     FileSortType = fstAlphabet
     PopupMenu = FileExplorerPopupMenu
-    ReadOnly = True
     Root = '/'
     TabOrder = 0
+    OnChanging = ShellTreeView1Changing
     OnSelectionChanged = ShellTreeView1SelectionChanged
-    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     ObjectTypes = [otFolders, otNonFolders]
   end
   object PageControl1: TPageControl

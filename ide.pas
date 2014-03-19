@@ -80,6 +80,8 @@ type
     procedure MenuFileExitClick(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure LoadAPIInspector();
+    procedure ShellTreeView1Changing(Sender: TObject; Node: TTreeNode;
+      var AllowChange: Boolean);
     procedure StoreAPIInspector();
     procedure PopulateAPIInspector(Tree: TTreeView; BaseApplication: string);
 
@@ -135,6 +137,16 @@ begin
     else
         CurrentAPI := CurrentAPI + OpenedAPI[i];
 end;
+
+procedure TIDEFrm.ShellTreeView1Changing(Sender: TObject; Node: TTreeNode;
+  var AllowChange: Boolean);
+begin
+//  ShowMessage(Node.Text);
+end;
+
+
+
+
 
 procedure TIDEFrm.StoreAPIInspector();
   Var OpenedAPI, OpenedFiles: string;
