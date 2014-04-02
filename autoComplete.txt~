@@ -17,6 +17,3 @@ Function
 ForEach
 =<ForEach var="" item="" key="">
 =</ForEach>
-CDATA
-=<![CDATA[
-=]]>
