@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <CONFIG>
-  <Compiler Value="/usr/bin/fpc" Date="1394934547"/>
+  <Compiler Value="/usr/bin/fpc" Date="1395410669"/>
   <Params Value=" -MObjFPC -Scghi -O1 -gw2 -godwarfsets -gl -vewnhi -Fi/opt/cscm-dev/kuink-studio/lib/x86_64-linux -Fl/opt/gnome/lib -Fu/home/paulotavares/.lazarus/lib/SynEdit/units/x86_64-linux/gtk2 -Fu/home/paulotavares/.lazarus/lib/IDEIntf/units/x86_64-linux/gtk2 -Fu/home/paulotavares/.lazarus/lib/units/x86_64-linux/gtk2 -Fu/home/paulotavares/.lazarus/lib/LCLBase/units/x86_64-linux -Fu/home/paulotavares/.lazarus/lib/LazUtils/lib/x86_64-linux -Fu/home/paulotavares/.lazarus/lib/units/x86_64-linux -Fu/opt/cscm-dev/kuink-studio/ -FU/opt/cscm-dev/kuink-studio/lib/x86_64-linux/ -l -dLCL -dLCLgtk2 kuinkIDE.lpr"/>
 </CONFIG>
