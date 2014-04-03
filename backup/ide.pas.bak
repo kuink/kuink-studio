@@ -98,7 +98,7 @@ type
     procedure EditorDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: boolean);
     procedure EditorDragDrop(Sender, Source: TObject; X, Y: integer);
-    procedure EditorCloseTag(Sender: TObject; var Key: char);
+    procedure EditorAutoComplete(Sender: TObject; var Key: char);
     procedure EditorEnter(Sender: TObject);
     procedure SaveNode(TabSheet: TKuinkEditorTab);
     procedure SaveAllNodes(Ask: Boolean);
@@ -411,6 +411,7 @@ begin
     end;
   end;
   '"': begin
+    ShowMessage(CurrentWord);
     Editor.InsertTextAtCaret('"');
     Editor.CaretXY := CurrentPosition;
     end;
@@ -722,7 +723,7 @@ begin
   Editor.OnChange := @PageChanged;
   Editor.OnDragOver := @EditorDragOver;
   Editor.OnDragDrop := @EditorDragDrop;
-  Editor.OnKeyPress := @EditorCloseTag;
+  Editor.OnKeyPress := @EditorAutoComplete;
   Editor.OnEnter:=@EditorEnter;
   Editor.Options:=[eoAutoIndent, eoTabIndent, eoTabsToSpaces];
   //Editor.Options:=[eoAutoIndent,eoBracketHighlight,eoGroupUndo,eoScrollPastEol,eoSmartTabs,eoTabIndent,eoTabsToSpaces,eoTrimTrailingSpaces];
