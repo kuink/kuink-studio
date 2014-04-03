@@ -98,6 +98,7 @@ type
     procedure EditorDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: boolean);
     procedure EditorDragDrop(Sender, Source: TObject; X, Y: integer);
+    procedure EditorAutoComplete(Sender: TObject; var Key: char);
     procedure EditorEnter(Sender: TObject);
     procedure SaveNode(TabSheet: TKuinkEditorTab);
     procedure SaveAllNodes(Ask: Boolean);
@@ -390,6 +391,31 @@ procedure TIDEFrm.EditorDragOver(Sender, Source: TObject; X, Y: integer;
   State: TDragState; var Accept: boolean);
 begin
   Accept := True;
+end;
+
+procedure TIDEFrm.EditorAutoComplete(Sender: TObject; var Key: char);
+var Editor: TSynEdit;
+var CurrentPosition: TPoint;
+var CurrentWord: string;
+begin
+  Editor := TSynEdit(Sender);
+  CurrentPosition := Editor.CaretXY;
+  case key of
+  '>':
+  begin
+    CurrentWord := Editor.GetWordAtRowCol(Editor.CaretXY);
+    if (CurrentWord <> '') then
+    begin
+     Editor.InsertTextAtCaret('</'+CurrentWord+'>');
+     Editor.CaretXY := CurrentPosition;
+    end;
+  end;
+  '"': begin
+    Editor.InsertTextAtCaret('"');
+    Editor.CaretXY := CurrentPosition;
+    end;
+  end;
+
 end;
 
 procedure TIDEFrm.EditorEnter(Sender: TObject);
@@ -687,6 +713,7 @@ begin
   TabSheet.Caption := NodeName;
   OnExitEventHandler := @ClosePage;
   PageControl1.OnCloseTabClicked := onExitEventHandler;
+
   Editor := TSynEdit.Create(tabSheet);
   Editor.Parent := TabSheet;
   Editor.Align := alClient;
@@ -695,6 +722,7 @@ begin
   Editor.OnChange := @PageChanged;
   Editor.OnDragOver := @EditorDragOver;
   Editor.OnDragDrop := @EditorDragDrop;
+  Editor.OnKeyPress := @EditorAutoComplete;
   Editor.OnEnter:=@EditorEnter;
   Editor.Options:=[eoAutoIndent, eoTabIndent, eoTabsToSpaces];
   //Editor.Options:=[eoAutoIndent,eoBracketHighlight,eoGroupUndo,eoScrollPastEol,eoSmartTabs,eoTabIndent,eoTabsToSpaces,eoTrimTrailingSpaces];
