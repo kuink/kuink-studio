@@ -19,10 +19,12 @@ type
   private
     PFilename: string;
     PChanged: boolean; //This source has changed?
+    PCode: boolean; //In CODE(true) view or DESIGN(false) view?
     PNodeType: TKuinkNodeType; //Type of this node
   published
     property Filename: string read PFilename write PFilename;
     property Changed: boolean read PChanged write PChanged;
+    property Code: boolean read PCode write PCode;
     property NodeType: TKuinkNodeType read PNodeType write PNodeType;
   end;
 
@@ -50,6 +52,9 @@ type
     FileNew: TMenuItem;
     FileNewXmlFile: TMenuItem;
     FEPopupRefresh: TMenuItem;
+    MenuViewDesign: TMenuItem;
+    MenuViewCode: TMenuItem;
+    MenuView: TMenuItem;
     ReplaceDialog1: TReplaceDialog;
     SaveAll: TMenuItem;
     PageControl1: TPageControl;
@@ -145,10 +150,6 @@ begin
 //  ShowMessage(Node.Text);
 end;
 
-
-
-
-
 procedure TIDEFrm.StoreAPIInspector();
   Var OpenedAPI, OpenedFiles: string;
     i, Max: integer;
@@ -169,7 +170,6 @@ procedure TIDEFrm.StoreAPIInspector();
     XmlConfig1.SetValue (CONFIG_APIINSPECTOR, OpenedAPI);
     //Store the opened files
 end;
-
 
 procedure TIDEFrm.PopulateAPIInspector(Tree: TTreeView; BaseApplication: string);
 var
@@ -282,7 +282,6 @@ begin
   GetKuinkFunctionSignature := FxSignature;
 end;
 
-
 procedure TIDEFrm.MenuEditFindNextClick(Sender: TObject);
 begin
   EditorFindNext();
@@ -374,7 +373,6 @@ begin
   OpenNode('untitled');
 end;
 
-
 function TIDEFrm.KuinkTypeToStr(KuinkType: TKuinkNodeType): string;
 var
   KuinkTypeStr: string;
@@ -393,31 +391,74 @@ begin
   Accept := True;
 end;
 
-procedure TIDEFrm.EditorAutoComplete(Sender: TObject; var Key: char);
-var Editor: TSynEdit;
-var CurrentPosition: TPoint;
-var CurrentWord: string;
-begin
+Procedure AuxGetTagInfoAtLine(Line: String; X: Integer; var XmlCurrentTag: String; var XmlCurrentAttribute: String; Var InsideQuot: Boolean);
+ Var I: Integer;
+ Var XmlTag, CurrentLine: string;
+ Var InsideTag: Boolean;
+ Var InsideAttr: Boolean;
+Begin
+  XmlTag := '';
+  InsideTag := False;
+  InsideAttr := False;
+  InsideQuot := False;
+  For I := 1 To X-1 Do
+  Begin
+    If (Line[I] = '"') Then
+       InsideQuot := Not InsideQuot;
+
+    If (Line[I] = '<') Then
+    Begin
+       InsideTag := True;
+       XmlTag := '';
+    End
+    Else If (Line[I] = ' ') Or (Line[I] = '/') then
+    Begin
+       InsideTag := False;
+       If (Line[I] = '/') Then
+          XmlTag := '';
+    End;
+    If InsideTag And (Line[I] <> '<') Then
+       XmlTag := XmlTag + Line[I];
+    //ShowMessage(XmlTag + IntToStr(I));
+  End;
+  XmlCurrentTag := XmlTag;
+End;
+
+Procedure TIDEFrm.EditorAutoComplete(Sender: TObject; var Key: char);
+Var Editor: TSynEdit;
+Var CurrentPosition: TPoint;
+Var XmlTag, XmlAttribute: string;
+Var InsideQuot: Boolean;
+Begin
   Editor := TSynEdit(Sender);
   CurrentPosition := Editor.CaretXY;
-  case key of
+  Case key Of
   '>':
-  begin
-    CurrentWord := Editor.GetWordAtRowCol(Editor.CaretXY);
-    if (CurrentWord <> '') then
-    begin
-     Editor.InsertTextAtCaret('</'+CurrentWord+'>');
+  Begin
+    AuxGetTagInfoAtLine(Editor.LineText, Editor.CaretX, XmlTag, XmlAttribute, InsideQuot);
+    //ShowMessage(XmlTag);
+    If (XmlTag <> '') And Not InsideQuot Then
+    Begin
+     Editor.InsertTextAtCaret('</'+XmlTag+'>');
      Editor.CaretXY := CurrentPosition;
-    end;
-  end;
-  '"': begin
-    ShowMessage(CurrentWord);
-    Editor.InsertTextAtCaret('"');
-    Editor.CaretXY := CurrentPosition;
-    end;
-  end;
+    End;
+  End;
 
-end;
+  '"': Begin
+    If (Editor.LineText[Editor.CaretX]='"') Then
+    Begin
+       Editor.CaretX := Editor.CaretX+1;
+       key := ' ';
+    End;
+    If (Editor.LineText[Editor.CaretX-1] = '=') Then
+    Begin
+         Editor.InsertTextAtCaret('"');
+         Editor.CaretXY := CurrentPosition;
+    End;
+    End;
+  End;
+
+End;
 
 procedure TIDEFrm.EditorEnter(Sender: TObject);
 var Editor: TSynEdit;
@@ -455,6 +496,7 @@ var
   TabSheet: TKuinkEditorTab;
   PageNum: integer;
   Reply, BoxStyle: integer;
+  Message: String;
 begin
   TabSheet := Sender as TKuinkEditorTab;
   PageNum := TabSheet.PageIndex;
@@ -463,8 +505,9 @@ begin
   if (TabSheet.Changed) then
   begin
     BoxStyle := MB_ICONQUESTION + MB_YESNOCANCEL;
-    Reply := Application.MessageBox('Save?', 'Content Changed', BoxStyle);
-    if Reply = IDYES then
+    Message := 'Save ' + ExtractFileName(Tabsheet.Filename)+ '?';
+    Reply := Application.MessageBox(Message, 'Content Changed', BoxStyle);
+    If Reply = IDYES Then
       SaveNode(TabSheet);
   end;
   if Reply <> IDCANCEL then
@@ -478,15 +521,14 @@ var
   TabSheet: TKuinkEditorTab;
 begin
   Editor := TSynEdit(Sender);
-  TabSheet := TKuinkEditorTab(editor.Parent);
+  TabSheet := TKuinkEditorTab(Editor.Parent);
 
-  if not TabSheet.Changed then
+  if Not TabSheet.Changed then
   begin
     TabSheet.Changed := True;
-    TabSheet.Caption := tabSheet.Caption + '*';
+    TabSheet.Caption := TabSheet.Caption + '*';
   end;
 end;
-
 
 procedure TIDEFrm.ShellTreeView1SelectionChanged(Sender: TObject);
 var
@@ -564,7 +606,6 @@ procedure TIDEFrm.EditorFindNext();
 
     Editor.SearchReplace(ReplaceDialog1.FindText, '', Opt);
 end;
-
 
 procedure TIDEFrm.ReplaceDialog1Find(Sender: TObject);
   begin
@@ -659,7 +700,6 @@ begin
   end;
 end;
 
-
 procedure TIDEFrm.SaveAllNodes(Ask: Boolean);
 var
   TabSheet: TKuinkEditorTab;
@@ -689,11 +729,12 @@ end;
 procedure TIDEFrm.OpenNode(FileName: String);
 Var
   InnerPageControl: TPageControl;
-  TabSheet: TTabSheet;
+  TabSheet: TKuinkEditorTab;
   Editor: TSynEdit;
   OnExitEventHandler: TNotifyEvent;
   NodeName: string;
   NodeType: TKuinkNodeType;
+  NodeView: string;
 begin
   NodeName := ExtractFileNameOnly(FileName);
   PageControl1.Options := [nboShowCloseButtons];
@@ -707,32 +748,42 @@ begin
     else
       NodeType := KuinkNode;
   end;
-  TKuinkEditorTab(TabSheet).Changed := False;
-  TKuinkEditorTab(TabSheet).NodeType := NodeType;
+  TabSheet.Changed := False;
+  TabSheet.NodeType := NodeType;
+  TabSheet.Code := True; //Start in code view
   TabSheet.Parent := PageControl1;
-  TKuinkEditorTab(TabSheet).Filename := FileName;
-  TabSheet.Caption := NodeName;
+  TabSheet.Filename := FileName;
+  TabSheet.Caption := NodeName;//+'('+'Code'+')';
+
   OnExitEventHandler := @ClosePage;
   PageControl1.OnCloseTabClicked := onExitEventHandler;
 
-  Editor := TSynEdit.Create(tabSheet);
+  Editor := TSynEdit.Create(TabSheet);
   Editor.Parent := TabSheet;
   Editor.Align := alClient;
   Editor.Visible := True;
   Editor.Highlighter := SynXMLSyn1;
+  Editor.LineHighlightColor.Background:=RGBToColor(246,224,63);
+  Editor.LineHighlightColor.FrameColor:=RGBToColor(212,102,0);
+  Editor.LineHighlightColor.FrameStyle:=slsDashed;
+  Editor.BracketMatchColor.Background:=RGBToColor(173,189,6);
   Editor.OnChange := @PageChanged;
   Editor.OnDragOver := @EditorDragOver;
   Editor.OnDragDrop := @EditorDragDrop;
   Editor.OnKeyPress := @EditorAutoComplete;
   Editor.OnEnter:=@EditorEnter;
-  Editor.Options:=[eoAutoIndent, eoTabIndent, eoTabsToSpaces];
+  Editor.Options:=[eoAutoIndent, eoTabIndent, eoTabsToSpaces, eoBracketHighlight];
   //Editor.Options:=[eoAutoIndent,eoBracketHighlight,eoGroupUndo,eoScrollPastEol,eoSmartTabs,eoTabIndent,eoTabsToSpaces,eoTrimTrailingSpaces];
 
   Editor.TabWidth:=StrToInt(XmlConfig1.GetValue(CONFIG_EDITOR_TABWIDTH, CONFIG_EDITOR_TABWIDTH_DEFAULT));
   If (FileName <> 'untitled') Then
-    Editor.Lines.LoadFromFile(TKuinkEditorTab(TabSheet).Filename);
-  StatusBar1.SimpleText := 'NodeType: ' + KuinkTypeToStr(
-    TKuinkEditorTab(tabSheet).NodeType);
+    Editor.Lines.LoadFromFile(TabSheet.Filename);
+
+  NodeView:='Code';
+  If Not tabSheet.Code Then
+     NodeView:='Design';
+
+  StatusBar1.SimpleText := 'NodeType: ' + '::' + NodeView + '::' + KuinkTypeToStr(TabSheet.NodeType);
 
 end;
 

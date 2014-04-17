@@ -123,6 +123,18 @@ msgctxt "TIDEFRM.MENUITEM2.CAPTION"
 msgid "About"
 msgstr ""
 
+#: tidefrm.menuview.caption
+msgid "View"
+msgstr ""
+
+#: tidefrm.menuviewcode.caption
+msgid "Code"
+msgstr ""
+
+#: tidefrm.menuviewdesign.caption
+msgid "Design"
+msgstr ""
+
 #: tidefrm.saveall.caption
 msgctxt "TIDEFRM.SAVEALL.CAPTION"
 msgid "Save All"

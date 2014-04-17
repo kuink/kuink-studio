@@ -1,11 +1,11 @@
 object IDEFrm: TIDEFrm
-  Left = 362
+  Left = 469
   Height = 505
   Top = 132
-  Width = 910
+  Width = 803
   Caption = 'KuinK | Studio'
   ClientHeight = 485
-  ClientWidth = 910
+  ClientWidth = 803
   Menu = MainMenu1
   OnActivate = FormActivate
   OnClose = FormClose
@@ -33,7 +33,7 @@ object IDEFrm: TIDEFrm
     Left = 164
     Height = 469
     Top = 0
-    Width = 589
+    Width = 482
     Align = alClient
     DragMode = dmAutomatic
     TabOrder = 1
@@ -50,12 +50,12 @@ object IDEFrm: TIDEFrm
     Left = 0
     Height = 16
     Top = 469
-    Width = 910
+    Width = 803
     Panels = <>
   end
   object APIInspector: TTreeView
     AnchorSideLeft.Control = Splitter2
-    Left = 761
+    Left = 654
     Height = 469
     Top = 0
     Width = 149
@@ -69,7 +69,7 @@ object IDEFrm: TIDEFrm
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoRightClickSelect, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
   end
   object Splitter2: TSplitter
-    Left = 753
+    Left = 646
     Height = 469
     Top = 0
     Width = 8
@@ -165,6 +165,17 @@ object IDEFrm: TIDEFrm
       object MenuFileExit: TMenuItem
         Caption = 'Exit'
         OnClick = MenuFileExitClick
+      end
+    end
+    object MenuView: TMenuItem
+      Caption = 'View'
+      object MenuViewCode: TMenuItem
+        Caption = 'Code'
+        Checked = True
+      end
+      object MenuViewDesign: TMenuItem
+        Caption = 'Design'
+        RadioItem = True
       end
     end
     object MenuEdit: TMenuItem
