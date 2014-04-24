@@ -1,11 +1,11 @@
 object IDEFrm: TIDEFrm
-  Left = 469
-  Height = 505
+  Left = 426
+  Height = 522
   Top = 132
-  Width = 803
+  Width = 846
   Caption = 'KuinK | Studio'
-  ClientHeight = 485
-  ClientWidth = 803
+  ClientHeight = 502
+  ClientWidth = 846
   Menu = MainMenu1
   OnActivate = FormActivate
   OnClose = FormClose
@@ -13,11 +13,14 @@ object IDEFrm: TIDEFrm
   LCLVersion = '1.0.14.0'
   object ShellTreeView1: TShellTreeView
     AnchorSideRight.Control = Splitter1
+    AnchorSideBottom.Control = NodeInspector
     Left = 0
-    Height = 469
+    Height = 304
     Top = 0
-    Width = 161
-    Align = alLeft
+    Width = 184
+    Align = alCustom
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    AutoExpand = True
     ExpandSignType = tvestPlusMinus
     FileSortType = fstAlphabet
     PopupMenu = FileExplorerPopupMenu
@@ -25,38 +28,41 @@ object IDEFrm: TIDEFrm
     TabOrder = 0
     OnChanging = ShellTreeView1Changing
     OnSelectionChanged = ShellTreeView1SelectionChanged
+    Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     ObjectTypes = [otFolders, otNonFolders]
   end
   object PageControl1: TPageControl
     AnchorSideLeft.Control = Splitter1
     AnchorSideRight.Control = Splitter2
-    Left = 164
-    Height = 469
+    Left = 191
+    Height = 486
     Top = 0
-    Width = 482
-    Align = alClient
+    Width = 498
+    Align = alRight
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 7
     DragMode = dmAutomatic
     TabOrder = 1
   end
   object Splitter1: TSplitter
-    AnchorSideLeft.Control = ShellTreeView1
     AnchorSideRight.Control = PageControl1
-    Left = 161
-    Height = 469
+    Left = 184
+    Height = 486
     Top = 0
-    Width = 3
+    Width = 7
+    Align = alCustom
   end
   object StatusBar1: TStatusBar
     Left = 0
     Height = 16
-    Top = 469
-    Width = 803
+    Top = 486
+    Width = 846
     Panels = <>
   end
   object APIInspector: TTreeView
     AnchorSideLeft.Control = Splitter2
-    Left = 654
-    Height = 469
+    Left = 697
+    Height = 486
     Top = 0
     Width = 149
     Align = alRight
@@ -69,12 +75,27 @@ object IDEFrm: TIDEFrm
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoRightClickSelect, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
   end
   object Splitter2: TSplitter
-    Left = 646
-    Height = 469
+    Left = 689
+    Height = 486
     Top = 0
     Width = 8
     Align = alRight
     ResizeAnchor = akRight
+  end
+  object NodeInspector: TTreeView
+    AnchorSideRight.Control = Splitter1
+    Left = 0
+    Height = 182
+    Top = 304
+    Width = 184
+    Align = alCustom
+    Anchors = [akLeft, akRight, akBottom]
+    AutoExpand = True
+    DefaultItemHeight = 16
+    ReadOnly = True
+    TabOrder = 6
+    OnDblClick = NodeInspectorDblClick
+    Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
   end
   object SynXMLSyn1: TSynXMLSyn
     DefaultFilter = 'XML Document (*.xml,*.xsd,*.xsl,*.xslt,*.dtd)|*.xml;*.xsd;*.xsl;*.xslt;*.dtd'

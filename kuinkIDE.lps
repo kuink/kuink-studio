@@ -11,7 +11,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="15" Y="17"/>
-        <UsageCount Value="78"/>
+        <UsageCount Value="94"/>
       </Unit0>
       <Unit1>
         <Filename Value="ide.pas"/>
@@ -23,10 +23,10 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="387"/>
-        <CursorPos X="23" Y="510"/>
-        <FoldState Value=" T3jf0H4 pk1kS03E piXjN0V316]Bbm103311T"/>
-        <UsageCount Value="78"/>
+        <TopLine Value="459"/>
+        <CursorPos X="38" Y="543"/>
+        <FoldState Value=" T3l004316 piXla0B11914 pj4n502611 TLxV05o"/>
+        <UsageCount Value="94"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -41,7 +41,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="25" Y="8"/>
-        <UsageCount Value="44"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit2>
@@ -53,7 +53,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="28" Y="15"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
@@ -62,14 +62,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="18" Y="21"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="18"/>
       </Unit4>
       <Unit5>
         <Filename Value="apps/framework/application.xml"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="10" Y="13"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="XML"/>
       </Unit5>
       <Unit6>
@@ -77,7 +77,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1197"/>
         <CursorPos X="27" Y="1312"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="8"/>
       </Unit6>
     </Units>
     <General>
@@ -86,123 +86,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="ide.pas"/>
-        <Caret Line="691" Column="1" TopLine="682"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position1>
       <Position2>
         <Filename Value="ide.pas"/>
-        <Caret Line="692" Column="1" TopLine="683"/>
+        <Caret Line="23" Column="36" TopLine="1"/>
       </Position2>
       <Position3>
         <Filename Value="ide.pas"/>
-        <Caret Line="732" Column="3" TopLine="721"/>
+        <Caret Line="102" Column="37" TopLine="78"/>
       </Position3>
       <Position4>
         <Filename Value="ide.pas"/>
-        <Caret Line="733" Column="3" TopLine="722"/>
+        <Caret Line="284" Column="41" TopLine="156"/>
       </Position4>
       <Position5>
         <Filename Value="ide.pas"/>
-        <Caret Line="732" Column="3" TopLine="721"/>
+        <Caret Line="545" Column="20" TopLine="422"/>
       </Position5>
       <Position6>
         <Filename Value="ide.pas"/>
-        <Caret Line="729" Column="40" TopLine="697"/>
+        <Caret Line="755" Column="31" TopLine="731"/>
       </Position6>
       <Position7>
         <Filename Value="ide.pas"/>
-        <Caret Line="734" Column="60" TopLine="705"/>
+        <Caret Line="873" Column="19" TopLine="860"/>
       </Position7>
       <Position8>
         <Filename Value="ide.pas"/>
-        <Caret Line="733" Column="60" TopLine="704"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position8>
       <Position9>
         <Filename Value="ide.pas"/>
-        <Caret Line="740" Column="81" TopLine="720"/>
+        <Caret Line="102" Column="27" TopLine="78"/>
       </Position9>
       <Position10>
         <Filename Value="ide.pas"/>
-        <Caret Line="739" Column="81" TopLine="719"/>
+        <Caret Line="290" Column="5" TopLine="162"/>
       </Position10>
       <Position11>
         <Filename Value="ide.pas"/>
-        <Caret Line="734" Column="34" TopLine="719"/>
+        <Caret Line="539" Column="23" TopLine="421"/>
       </Position11>
       <Position12>
         <Filename Value="ide.pas"/>
-        <Caret Line="102" Column="26" TopLine="88"/>
+        <Caret Line="544" Column="20" TopLine="421"/>
       </Position12>
       <Position13>
         <Filename Value="ide.pas"/>
-        <Caret Line="688" Column="35" TopLine="674"/>
+        <Caret Line="754" Column="17" TopLine="730"/>
       </Position13>
       <Position14>
         <Filename Value="ide.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="872" Column="21" TopLine="859"/>
       </Position14>
       <Position15>
         <Filename Value="ide.pas"/>
-        <Caret Line="628" Column="40" TopLine="603"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position15>
       <Position16>
         <Filename Value="ide.pas"/>
-        <Caret Line="656" Column="16" TopLine="632"/>
+        <Caret Line="102" Column="27" TopLine="78"/>
       </Position16>
       <Position17>
         <Filename Value="ide.pas"/>
-        <Caret Line="730" Column="12" TopLine="712"/>
+        <Caret Line="284" Column="31" TopLine="156"/>
       </Position17>
       <Position18>
         <Filename Value="ide.pas"/>
-        <Caret Line="67" Column="39" TopLine="53"/>
+        <Caret Line="545" Column="26" TopLine="421"/>
       </Position18>
       <Position19>
         <Filename Value="ide.pas"/>
-        <Caret Line="106" Column="33" TopLine="82"/>
+        <Caret Line="546" Column="36" TopLine="502"/>
       </Position19>
       <Position20>
         <Filename Value="ide.pas"/>
-        <Caret Line="320" Column="63" TopLine="307"/>
+        <Caret Line="756" Column="17" TopLine="732"/>
       </Position20>
       <Position21>
         <Filename Value="ide.pas"/>
-        <Caret Line="435" Column="20" TopLine="406"/>
+        <Caret Line="877" Column="25" TopLine="861"/>
       </Position21>
       <Position22>
         <Filename Value="ide.pas"/>
-        <Caret Line="430" Column="23" TopLine="401"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position22>
       <Position23>
         <Filename Value="ide.pas"/>
-        <Caret Line="731" Column="17" TopLine="702"/>
+        <Caret Line="117" Column="26" TopLine="102"/>
       </Position23>
       <Position24>
         <Filename Value="ide.pas"/>
-        <Caret Line="21" Column="49" TopLine="6"/>
+        <Caret Line="546" Column="38" TopLine="421"/>
       </Position24>
       <Position25>
         <Filename Value="ide.pas"/>
-        <Caret Line="26" Column="59" TopLine="6"/>
+        <Caret Line="857" Column="31" TopLine="833"/>
       </Position25>
       <Position26>
         <Filename Value="ide.pas"/>
-        <Caret Line="27" Column="56" TopLine="6"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position26>
       <Position27>
         <Filename Value="ide.pas"/>
-        <Caret Line="100" Column="45" TopLine="76"/>
+        <Caret Line="102" Column="27" TopLine="78"/>
       </Position27>
       <Position28>
         <Filename Value="ide.pas"/>
-        <Caret Line="102" Column="26" TopLine="78"/>
+        <Caret Line="18" Column="13" TopLine="6"/>
       </Position28>
       <Position29>
         <Filename Value="ide.pas"/>
-        <Caret Line="527" Column="35" TopLine="387"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position29>
       <Position30>
         <Filename Value="ide.pas"/>
-        <Caret Line="507" Column="86" TopLine="471"/>
+        <Caret Line="117" Column="26" TopLine="93"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>

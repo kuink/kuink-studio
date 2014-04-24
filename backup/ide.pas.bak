@@ -5,9 +5,10 @@ unit ide;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, SynHighlighterXML, SynEdit, SynEditTypes, SynCompletion, Forms,
-  Controls, Graphics, Dialogs, ComCtrls, ShellCtrls, ExtCtrls,
-  Menus, laz2_XMLRead, laz2_DOM, about, XMLConf, LCLType, DefaultTranslator, Identifiers;
+  Classes, SysUtils, FileUtil, SynHighlighterXML, SynEdit, SynEditTypes,
+  SynCompletion, Forms, Controls, Graphics, Dialogs, ComCtrls, ShellCtrls,
+  ExtCtrls, Menus, laz2_XMLRead, laz2_DOM, about, XMLConf, LCLType,
+  DefaultTranslator, PairSplitter, Identifiers;
 
 const
   FileFound = 0;
@@ -15,17 +16,23 @@ const
 type
   TKuinkNodeType = (KuinkApplication, KuinkProcess, KuinkNode);
 
+  TKuinkNodeData = class
+     Text : string;
+  end;
+
   TKuinkEditorTab = class(TTabSheet)
   private
     PFilename: string;
     PChanged: boolean; //This source has changed?
     PCode: boolean; //In CODE(true) view or DESIGN(false) view?
     PNodeType: TKuinkNodeType; //Type of this node
+    PXmlNode: TXMLDocument; //Stores the last saved xml node
   published
     property Filename: string read PFilename write PFilename;
     property Changed: boolean read PChanged write PChanged;
     property Code: boolean read PCode write PCode;
     property NodeType: TKuinkNodeType read PNodeType write PNodeType;
+    property XmlNode: TXMLDocument read PXmlNode write PXmlNode;
   end;
 
   { TIDEFrm }
@@ -68,6 +75,7 @@ type
     SynCompletion1: TSynCompletion;
     SynXMLSyn1: TSynXMLSyn;
     APIInspector: TTreeView;
+    NodeInspector: TTreeView;
     XMLConfig1: TXMLConfig;
     procedure APIPopupAddClick(Sender: TObject);
     procedure APIPopupMenuRefreshClick(Sender: TObject);
@@ -85,11 +93,13 @@ type
     procedure MenuFileExitClick(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure LoadAPIInspector();
+    procedure NodeInspectorDblClick(Sender: TObject);
     procedure ShellTreeView1Changing(Sender: TObject; Node: TTreeNode;
       var AllowChange: Boolean);
     procedure StoreAPIInspector();
     procedure PopulateAPIInspector(Tree: TTreeView; BaseApplication: string);
-
+    procedure PopulateInspectorAddElement(XMLDoc: TXMLDocument; tagContainer: string; curTag: string; curAttr: string);
+    procedure PopulateNodeInspector(TabSheet: TKuinkEditorTab);
     procedure FileMenuClick(Sender: TObject);
     procedure FileSaveClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -142,6 +152,22 @@ begin
     end
     else
         CurrentAPI := CurrentAPI + OpenedAPI[i];
+end;
+
+procedure TIDEFrm.NodeInspectorDblClick(Sender: TObject);
+var
+  Selected: TTreeNode;
+  TabSheet: TKuinkEditorTab;
+  Editor: TSynEdit;
+  Opt : TSynSearchOptions;
+begin
+  Selected := NodeInspector.Selected;
+
+  TabSheet := TKuinkEditorTab(PageControl1.ActivePage);
+  Editor := TSynEdit(tabSheet.Controls[0]);
+  Opt := [];
+  Include(Opt, ssoEntireScope);
+  Editor.SearchReplace(TKuinkNodeData(Selected.Data).Text, '', Opt);
 end;
 
 procedure TIDEFrm.ShellTreeView1Changing(Sender: TObject; Node: TTreeNode;
@@ -216,6 +242,52 @@ begin
   XMLDoc.Free;
   FindClose(SearchResult);
   Tree.AlphaSort; //Sort the tree Alphabetical order
+end;
+
+procedure TIDEFrm.PopulateInspectorAddElement(XMLDoc: TXMLDocument; tagContainer: string; curTag: string; curAttr: string);
+var
+   TreeNode, NewNode: TTreeNode;
+   iNode, iAttr: TDOMNode;
+   AttrName: String;
+   i: integer;
+   s: string;
+begin
+  iNode := XMLDoc.DocumentElement.FindNode(tagContainer);
+  TreeNode := NodeInspector.Items.AddChild(nil, curTag);
+  if iNode <> nil then
+  begin
+    //Process Screen names
+    iNode := iNode.FirstChild;
+    while iNode <> nil do
+    begin
+      s := '';
+      if iNode.HasAttributes and (iNode.Attributes.Length > 0) then
+      begin
+        for i := 0 to iNode.Attributes.Length-1 do
+        begin
+          s := s + ' ' + string(iNode.Attributes.Item[i].NodeName) +'="' + string(iNode.Attributes.Item[i].NodeValue + '"');
+        end;
+        iAttr := iNode.Attributes.GetNamedItem(curAttr);
+        if iAttr <> nil then
+        begin
+             AttrName :=  iAttr.NodeValue;
+             NewNode := NodeInspector.Items.AddChild(TreeNode, AttrName);
+             NewNode.Data := TKuinkNodeData.Create();
+             TKuinkNodeData(NewNode.Data).Text := '<'+curTag+s;
+        end;
+      end;
+      iNode := iNode.NextSibling;
+    end;
+  end;
+end;
+
+procedure TIDEFrm.PopulateNodeInspector(TabSheet: TKuinkEditorTab);
+begin
+  NodeInspector.Items.Clear;
+  //TabSheet := TKuinkEditorTab(PageControl1.ActivePage);
+  PopulateInspectorAddElement(TabSheet.XmlNode, 'Screens', 'Screen', 'id');
+  PopulateInspectorAddElement(TabSheet.XmlNode, 'Actions', 'Action','name');
+  PopulateInspectorAddElement(TabSheet.XmlNode, 'Library', 'Function','name');
 end;
 
 function TIDEFrm.GetKuinkFunctionSignature(AppName, ProcessName,
@@ -462,10 +534,14 @@ End;
 
 procedure TIDEFrm.EditorEnter(Sender: TObject);
 var Editor: TSynEdit;
+  TabSheet: TKuinkEditorTab;
 begin
      Editor := TSynEdit(Sender);
      SynAutoComplete1.Editor := Editor;
      SynCompletion1.Editor := Editor;
+     TabSheet := TKuinkEditorTab(Editor.Parent);
+     PopulateNodeInspector(TabSheet);
+     ShowMessage(TabSheet.Filename);
 end;
 
 procedure TIDEFrm.EditorDragDrop(Sender, Source: TObject; X, Y: integer);
@@ -506,7 +582,7 @@ begin
   begin
     BoxStyle := MB_ICONQUESTION + MB_YESNOCANCEL;
     Message := 'Save ' + ExtractFileName(Tabsheet.Filename)+ '?';
-    Reply := Application.MessageBox(Message, 'Content Changed', BoxStyle);
+    Reply := Application.MessageBox(PChar(Message), 'Content Changed', BoxStyle);
     If Reply = IDYES Then
       SaveNode(TabSheet);
   end;
@@ -660,7 +736,7 @@ begin
   SaveCanceled := False;
   if TabSheet.Changed then
   begin
-    Editor := TSynEdit(tabSheet.Controls[0]);
+    Editor := TSynEdit(TabSheet.Controls[0]);
     //Validate the xml
     S := TStringStream.Create(Editor.Lines.GetText);
     try
@@ -672,8 +748,11 @@ begin
     //finally
     //  S.Free;
     end;
+    TabSheet.XmlNode := XMLDoc;
     S.Free;
-    XMLDoc.Free;
+    //Repopulate the node inspector
+    PopulateNodeInspector(TabSheet);
+    //XMLDoc.Free;
 
     If (TabSheet.Filename = 'untitled') Then
     begin
@@ -735,6 +814,8 @@ Var
   NodeName: string;
   NodeType: TKuinkNodeType;
   NodeView: string;
+  S: TStringStream;
+  XMLDoc: TXMLDocument;
 begin
   NodeName := ExtractFileNameOnly(FileName);
   PageControl1.Options := [nboShowCloseButtons];
@@ -785,6 +866,23 @@ begin
 
   StatusBar1.SimpleText := 'NodeType: ' + '::' + NodeView + '::' + KuinkTypeToStr(TabSheet.NodeType);
 
+  //Load the node into the XML object in TabSheet
+  S := TStringStream.Create(Editor.Lines.GetText);
+  try
+    // Read complete XML document
+    ReadXMLFile(XMLDoc, S);
+  except
+    on E: Exception do
+       ShowMessage(E.Message);
+  //finally
+  //  S.Free;
+  end;
+  S.Free;
+  TabSheet.XmlNode := XMLDoc;
+
+  //Populate NodeInspector
+  PopulateNodeInspector(TabSheet);
+  //XMLDoc.Free;
 end;
 
 end.
