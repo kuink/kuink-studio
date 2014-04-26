@@ -170,6 +170,7 @@ begin
   Editor.SearchReplace(TKuinkNodeData(Selected.Data).Text, '', Opt);
 end;
 
+
 procedure TIDEFrm.ShellTreeView1Changing(Sender: TObject; Node: TTreeNode;
   var AllowChange: Boolean);
 begin
@@ -253,11 +254,11 @@ var
    s: string;
 begin
   iNode := XMLDoc.DocumentElement.FindNode(tagContainer);
-  TreeNode := NodeInspector.Items.AddChild(nil, curTag);
   if iNode <> nil then
   begin
-    //Process Screen names
+    //Populate the tree
     iNode := iNode.FirstChild;
+    TreeNode := NodeInspector.Items.AddChild(nil, curTag);
     while iNode <> nil do
     begin
       s := '';

@@ -1,7 +1,7 @@
 object IDEFrm: TIDEFrm
-  Left = 426
+  Left = 304
   Height = 522
-  Top = 132
+  Top = 216
   Width = 846
   Caption = 'KuinK | Studio'
   ClientHeight = 502
@@ -10,7 +10,7 @@ object IDEFrm: TIDEFrm
   OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
-  LCLVersion = '1.0.14.0'
+  LCLVersion = '1.2.2.0'
   object ShellTreeView1: TShellTreeView
     AnchorSideRight.Control = Splitter1
     AnchorSideBottom.Control = NodeInspector
@@ -25,10 +25,11 @@ object IDEFrm: TIDEFrm
     FileSortType = fstAlphabet
     PopupMenu = FileExplorerPopupMenu
     Root = '/'
+    ShowRoot = False
     TabOrder = 0
     OnChanging = ShellTreeView1Changing
     OnSelectionChanged = ShellTreeView1SelectionChanged
-    Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+    Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoToolTips, tvoThemedDraw]
     ObjectTypes = [otFolders, otNonFolders]
   end
   object PageControl1: TPageControl
@@ -38,7 +39,7 @@ object IDEFrm: TIDEFrm
     Height = 486
     Top = 0
     Width = 498
-    Align = alRight
+    Align = alCustom
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 7
     DragMode = dmAutomatic

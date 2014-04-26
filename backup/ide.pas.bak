@@ -94,6 +94,7 @@ type
     procedure MenuItem2Click(Sender: TObject);
     procedure LoadAPIInspector();
     procedure NodeInspectorDblClick(Sender: TObject);
+    procedure ShellTreeView1Change(Sender: TObject; Node: TTreeNode);
     procedure ShellTreeView1Changing(Sender: TObject; Node: TTreeNode;
       var AllowChange: Boolean);
     procedure StoreAPIInspector();
@@ -169,6 +170,7 @@ begin
   Include(Opt, ssoEntireScope);
   Editor.SearchReplace(TKuinkNodeData(Selected.Data).Text, '', Opt);
 end;
+
 
 procedure TIDEFrm.ShellTreeView1Changing(Sender: TObject; Node: TTreeNode;
   var AllowChange: Boolean);
@@ -253,11 +255,11 @@ var
    s: string;
 begin
   iNode := XMLDoc.DocumentElement.FindNode(tagContainer);
-  TreeNode := NodeInspector.Items.AddChild(nil, curTag);
   if iNode <> nil then
   begin
-    //Process Screen names
+    //Populate the tree
     iNode := iNode.FirstChild;
+    TreeNode := NodeInspector.Items.AddChild(nil, curTag);
     while iNode <> nil do
     begin
       s := '';
@@ -541,7 +543,6 @@ begin
      SynCompletion1.Editor := Editor;
      TabSheet := TKuinkEditorTab(Editor.Parent);
      PopulateNodeInspector(TabSheet);
-     ShowMessage(TabSheet.Filename);
 end;
 
 procedure TIDEFrm.EditorDragDrop(Sender, Source: TObject; X, Y: integer);
