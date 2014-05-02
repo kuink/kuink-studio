@@ -283,12 +283,16 @@ begin
 end;
 
 procedure TIDEFrm.PopulateNodeInspector(TabSheet: TKuinkEditorTab);
+var Root: TDOMNode;
 begin
-  NodeInspector.Items.Clear;
-  //TabSheet := TKuinkEditorTab(PageControl1.ActivePage);
-  PopulateInspectorAddElement(TabSheet.XmlNode, 'Screens', 'Screen', 'id');
-  PopulateInspectorAddElement(TabSheet.XmlNode, 'Actions', 'Action','name');
-  PopulateInspectorAddElement(TabSheet.XmlNode, 'Library', 'Function','name');
+  If TabSheet.XmlNode <> nil Then
+  Begin
+    NodeInspector.Items.Clear;
+    //TabSheet := TKuinkEditorTab(PageControl1.ActivePage);
+    PopulateInspectorAddElement(TabSheet.XmlNode, 'Screens', 'Screen', 'id');
+    PopulateInspectorAddElement(TabSheet.XmlNode, 'Actions', 'Action','name');
+    PopulateInspectorAddElement(TabSheet.XmlNode, 'Library', 'Function','name');
+  end;
 end;
 
 function TIDEFrm.GetKuinkFunctionSignature(AppName, ProcessName,
@@ -867,18 +871,24 @@ begin
   StatusBar1.SimpleText := 'NodeType: ' + '::' + NodeView + '::' + KuinkTypeToStr(TabSheet.NodeType);
 
   //Load the node into the XML object in TabSheet
-  S := TStringStream.Create(Editor.Lines.GetText);
-  try
-    // Read complete XML document
-    ReadXMLFile(XMLDoc, S);
-  except
-    on E: Exception do
-       ShowMessage(E.Message);
-  //finally
-  //  S.Free;
-  end;
-  S.Free;
-  TabSheet.XmlNode := XMLDoc;
+  If FileName <> 'untitled' Then
+  Begin
+    XMLDoc := nil;
+    S := TStringStream.Create(Editor.Lines.GetText);
+    try
+      // Read complete XML document
+      ReadXMLFile(XMLDoc, S);
+    except
+      on E: Exception do
+         ShowMessage(E.Message);
+    //finally
+    //  S.Free;
+    end;
+    S.Free;
+    TabSheet.XmlNode := XMLDoc;
+  end
+  Else
+      TabSheet.XmlNode := nil;
 
   //Populate NodeInspector
   PopulateNodeInspector(TabSheet);
